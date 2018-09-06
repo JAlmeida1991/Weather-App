@@ -4,35 +4,63 @@
 // ICON URL:
 //http://openweathermap.org/img/w/${img}.png
 
+// Moment format:
+// new moment().format('MMM, Do YYYY h:mma') // "Sep, 6th 2018 3:00am"
+
 // Declare DOM nodes
 const form = document.querySelector("#form");
 const input = document.querySelector("#input");
-const img = document.querySelector(".weather-icon");
-const city = document.querySelector(".weather-city");
-const description = document.querySelector(".weather-description");
-const temp = document.querySelector(".weather-temp");
+const forecast = document.querySelectorAll(".forecast");
+// const img = document.querySelector(".weather-icon");
+// const city = document.querySelector(".weather-city");
+// const description = document.querySelector(".weather-description");
+// const temp = document.querySelector(".weather-temp");
+
+// 0 8 16 24 32
 
 form.addEventListener("submit", e => {
   const value = input.value;
+  let count = 0;
+  const myArr = [];
   fetchWeather(value)
     .then(data => {
-      // Obtaining fetched data
-      const cityName = data.city.name;
-      const currentWeather = data.list[0].weather[0];
-      const weatherIconCode = currentWeather.icon;
-      const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
-      const weatherDescription = currentWeather.description;
-      // Need to convert Kelvin to either Fahrenheit or Celsius
-      const weatherForecast = data.list[0].main;
-      // Current tempature
-      const weatherTemp = weatherForecast.temp;
-      // Setting DOM node values
-      img.setAttribute("src", weatherIconURL);
-      description.textContent = weatherDescription;
-      city.textContent = cityName;
-      temp.textContent = kelvinToFahrenheit(weatherTemp);
-      console.log(kelvinToFahrenheit(weatherTemp));
-      console.log(celsiusToKelvin(weatherTemp));
+      forecast.forEach((day, index) => {
+        if (index !== 0) {
+          count += 8;
+        }
+        // Obtaining fetched data
+        const cityName = data.city.name;
+        const currentWeather = data.list[count].weather[0];
+        const weatherIconCode = currentWeather.icon;
+        const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
+        const weatherDescription = currentWeather.description;
+        myArr.push({
+          cityName,
+          currentWeather,
+          weatherIconCode,
+          weatherIconURL,
+          weatherDescription,
+          count
+        });
+      });
+      console.log(myArr);
+      // // Obtaining fetched data
+      // const cityName = data.city.name;
+      // const currentWeather = data.list[0].weather[0];
+      // const weatherIconCode = currentWeather.icon;
+      // const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
+      // const weatherDescription = currentWeather.description;
+      // // Need to convert Kelvin to either Fahrenheit or Celsius
+      // const weatherForecast = data.list[0].main;
+      // // Current tempature
+      // const weatherTemp = weatherForecast.temp;
+      // // Setting DOM node values
+      // img.setAttribute("src", weatherIconURL);
+      // description.textContent = weatherDescription;
+      // city.textContent = cityName;
+      // temp.textContent = kelvinToFahrenheit(weatherTemp);
+      // input.value = "";
+      // console.log(data);
     })
     .catch(err => console.log(err));
   e.preventDefault();
