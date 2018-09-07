@@ -11,59 +11,66 @@
 const form = document.querySelector("#form");
 const input = document.querySelector("#input");
 const forecast = document.querySelectorAll(".forecast");
-// const img = document.querySelector(".weather-icon");
-// const city = document.querySelector(".weather-city");
-// const description = document.querySelector(".weather-description");
-// const temp = document.querySelector(".weather-temp");
+const fahrenheit = document.querySelector(".fahrenheit");
+const celsius = document.querySelector(".celsius");
 
-// 0 8 16 24 32
+// Needed in order to let user pick wheather he or she wants the temp format in either celcius or fahrenheit
+let isFahrenheit = true;
 
 form.addEventListener("submit", e => {
   const value = input.value;
   let count = 0;
-  const myArr = [];
   fetchWeather(value)
     .then(data => {
+      const cityName = data.city.name;
       forecast.forEach((day, index) => {
         if (index !== 0) {
           count += 8;
-        }
-        // Obtaining fetched data
-        const cityName = data.city.name;
+        } // Obtaining fetched data
         const currentWeather = data.list[count].weather[0];
         const weatherIconCode = currentWeather.icon;
         const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
         const weatherDescription = currentWeather.description;
-        myArr.push({
-          cityName,
-          currentWeather,
-          weatherIconCode,
-          weatherIconURL,
-          weatherDescription,
-          count
-        });
+        // Need to convert Kelvin to either Fahrenheit or Celsius
+        const weatherForecast = data.list[count].main;
+
+        const weatherTime = data.list[count].dt_txt;
+        const formatedWeatherTimed = new moment(weatherTime).format(
+          "MMM, Do YYYY"
+        );
+        // Current tempature
+        const weatherTemp = weatherForecast.temp;
+        // Setting DOM node values
+        day.querySelector(".weather-icon").setAttribute("src", weatherIconURL);
+        day.querySelector(
+          ".weather-description"
+        ).textContent = weatherDescription;
+        day.querySelector(".weather-time").textContent = formatedWeatherTimed;
+        day.querySelector(".weather-temp").textContent = kelvinToFahrenheit(
+          weatherTemp
+        );
+        input.value = "";
+        console.log(data);
+        console.log(weatherTime);
       });
-      console.log(myArr);
-      // // Obtaining fetched data
-      // const cityName = data.city.name;
-      // const currentWeather = data.list[0].weather[0];
-      // const weatherIconCode = currentWeather.icon;
-      // const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
-      // const weatherDescription = currentWeather.description;
-      // // Need to convert Kelvin to either Fahrenheit or Celsius
-      // const weatherForecast = data.list[0].main;
-      // // Current tempature
-      // const weatherTemp = weatherForecast.temp;
-      // // Setting DOM node values
-      // img.setAttribute("src", weatherIconURL);
-      // description.textContent = weatherDescription;
-      // city.textContent = cityName;
-      // temp.textContent = kelvinToFahrenheit(weatherTemp);
-      // input.value = "";
-      // console.log(data);
+      document.querySelector(".weather-city").textContent = cityName;
     })
     .catch(err => console.log(err));
   e.preventDefault();
+});
+
+fahrenheit.addEventListener("click", () => {
+  forecast.forEach(day => {
+    let weatherTemp = day.querySelector(".weather-temp");
+    weatherTemp.textContent = celsiusToFahrenheit(weatherTemp.textContent);
+  });
+});
+
+celsius.addEventListener("click", () => {
+  forecast.forEach(day => {
+    let weatherTemp = day.querySelector(".weather-temp");
+    weatherTemp.textContent = fahrenheitToCelsius(weatherTemp.textContent);
+  });
 });
 
 async function fetchWeather(zip) {
