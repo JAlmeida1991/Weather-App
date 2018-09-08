@@ -17,24 +17,32 @@ const celsius = document.querySelector(".celsius");
 // Needed in order to let user pick wheather he or she wants the temp format in either celcius or fahrenheit
 let isFahrenheit = true;
 
+// Event handlers
 form.addEventListener("submit", e => {
   const value = input.value;
   let count = 0;
   fetchWeather(value)
     .then(data => {
       const cityName = data.city.name;
+
       forecast.forEach((day, index) => {
+        // Index is needed in order to transition to next day
         if (index !== 0) {
           count += 8;
-        } // Obtaining fetched data
+        }
+        // Obtains current weather object for specific day
         const currentWeather = data.list[count].weather[0];
+        // Obtains current weather icon code
         const weatherIconCode = currentWeather.icon;
+        // Obtains current weather icon code
         const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
+        // Obtains description for current weather
         const weatherDescription = currentWeather.description;
         // Need to convert Kelvin to either Fahrenheit or Celsius
         const weatherForecast = data.list[count].main;
 
         const weatherTime = data.list[count].dt_txt;
+
         const formatedWeatherTimed = new moment(weatherTime).format(
           "MMM, Do YYYY"
         );
@@ -46,32 +54,48 @@ form.addEventListener("submit", e => {
           ".weather-description"
         ).textContent = weatherDescription;
         day.querySelector(".weather-time").textContent = formatedWeatherTimed;
-        day.querySelector(".weather-temp").textContent = kelvinToFahrenheit(
-          weatherTemp
-        );
+
+        if (isFahrenheit) {
+          day.querySelector(".weather-temp").textContent = kelvinToFahrenheit(
+            weatherTemp
+          );
+        } else {
+          day.querySelector(".weather-temp").textContent = kelvinToCelsius(
+            weatherTemp
+          );
+        }
         input.value = "";
-        console.log(data);
-        console.log(weatherTime);
       });
       document.querySelector(".weather-city").textContent = cityName;
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      alert("Please enter a valid Zip Code");
+      input.value = "";
+    });
   e.preventDefault();
 });
 
 fahrenheit.addEventListener("click", () => {
-  forecast.forEach(day => {
-    let weatherTemp = day.querySelector(".weather-temp");
-    weatherTemp.textContent = celsiusToFahrenheit(weatherTemp.textContent);
-  });
+  if (!isFahrenheit) {
+    isFahrenheit = true;
+    forecast.forEach(day => {
+      let weatherTemp = day.querySelector(".weather-temp");
+      weatherTemp.textContent = celsiusToFahrenheit(weatherTemp.textContent);
+    });
+  }
 });
 
 celsius.addEventListener("click", () => {
-  forecast.forEach(day => {
-    let weatherTemp = day.querySelector(".weather-temp");
-    weatherTemp.textContent = fahrenheitToCelsius(weatherTemp.textContent);
-  });
+  if (isFahrenheit) {
+    isFahrenheit = false;
+    forecast.forEach(day => {
+      let weatherTemp = day.querySelector(".weather-temp");
+      weatherTemp.textContent = fahrenheitToCelsius(weatherTemp.textContent);
+    });
+  }
 });
+
+// Helper functions
 
 async function fetchWeather(zip) {
   const key = "bd6195cea8c0c0319222afc60b50be0d";
@@ -82,22 +106,22 @@ async function fetchWeather(zip) {
     const response = await request.json();
     return response;
   } catch (err) {
-    console.log("error");
+    throw new Error();
   }
 }
 
 function kelvinToFahrenheit(kelvin) {
-  return ((kelvin * 9) / 5 - 459.67).toFixed(2) + "°F";
+  return ((kelvin * 9) / 5 - 459.67).toFixed(0) + "°F";
 }
 
-function celsiusToKelvin(kelvin) {
-  return (kelvin - 273.15).toFixed(2) + "°C";
+function kelvinToCelsius(kelvin) {
+  return (kelvin - 273.15).toFixed(0) + "°C";
 }
 
 function celsiusToFahrenheit(celsius) {
-  return ((parseInt(celsius) * 9) / 5 + 32).toFixed(2) + "°F";
+  return ((parseInt(celsius) * 9) / 5 + 32).toFixed(0) + "°F";
 }
 
 function fahrenheitToCelsius(fahrenheit) {
-  return (((parseInt(fahrenheit) - 32) * 5) / 9).toFixed(2) + "°C";
+  return (((parseInt(fahrenheit) - 32) * 5) / 9).toFixed(0) + "°C";
 }
