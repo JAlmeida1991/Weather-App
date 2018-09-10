@@ -24,7 +24,7 @@ form.addEventListener("submit", e => {
   fetchWeather(value)
     .then(data => {
       const cityName = data.city.name;
-
+      console.log(data);
       forecast.forEach((day, index) => {
         // Index is needed in order to transition to next day
         if (index !== 0) {
@@ -35,7 +35,8 @@ form.addEventListener("submit", e => {
         // Obtains current weather icon code
         const weatherIconCode = currentWeather.icon;
         // Obtains current weather icon code
-        const weatherIconURL = `http://openweathermap.org/img/w/${weatherIconCode}.png`;
+        // Must exclude defualt http since will not work for https servers
+        const weatherIconURL = `//openweathermap.org/img/w/${weatherIconCode}.png`;
         // Obtains description for current weather
         const weatherDescription = currentWeather.description;
         // Need to convert Kelvin to either Fahrenheit or Celsius
@@ -46,13 +47,20 @@ form.addEventListener("submit", e => {
         const formatedWeatherTimed = new moment(weatherTime).format(
           "MMM, Do YYYY"
         );
+        const weatherHumid = weatherForecast.humidity;
         // Current tempature
         const weatherTemp = weatherForecast.temp;
         // Setting DOM node values
         day.querySelector(".weather-icon").setAttribute("src", weatherIconURL);
+
         day.querySelector(
           ".weather-description"
         ).textContent = weatherDescription;
+
+        day.querySelector(
+          ".weather-humidity"
+        ).textContent = `Humidity: ${weatherHumid}%`;
+
         day.querySelector(".weather-time").textContent = formatedWeatherTimed;
 
         if (isFahrenheit) {
@@ -100,8 +108,9 @@ celsius.addEventListener("click", () => {
 async function fetchWeather(zip) {
   const key = "bd6195cea8c0c0319222afc60b50be0d";
   try {
+    // Must exclude defualt http since will not work for https servers
     const request = await fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?zip=${zip}&appid=${key}`
+      `//api.openweathermap.org/data/2.5/forecast?zip=${zip}&appid=${key}`
     );
     const response = await request.json();
     return response;

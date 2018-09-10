@@ -27,24 +27,29 @@ $colorFahrenheitHover: #c23616;
 
 html {
   font-size: 62.5%;
-  // height: 95%;
 }
 
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #dfe6e9;
-  // Needed in order for buttons to show first in moible mode
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
-  // height: 95%;
 }
 
-.weather-app-title {
-  @include title(2.5rem);
-}
-.weather-city--title {
-  @include title((1.8rem));
+.weather {
+  &-app-title {
+    @include title(2.5rem);
+  }
+
+  &-description {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+  }
+
+  &-temp,
+  &-humidity {
+    font-size: 1.5rem;
+  }
 }
 
 #form {
@@ -58,7 +63,6 @@ body {
   margin-right: 1rem;
 }
 
-#submit,
 .btn {
   @extend %button;
   background-color: #b2bec3;
@@ -73,21 +77,13 @@ body {
   &--center {
     display: flex;
     justify-content: center;
+    margin-top: 1rem;
   }
   @media only screen and (max-width: 35rem) {
     flex-direction: column;
     align-items: center;
     order: 1;
   }
-}
-
-.weather-description {
-  font-size: 1.5rem;
-  text-transform: capitalize;
-}
-
-.weather-temp {
-  font-size: 1.5rem;
 }
 
 .celsius {
@@ -113,8 +109,11 @@ body {
   justify-content: space-around;
   align-items: center;
   height: 30rem;
+  flex: 1;
+  // border: 1px solid red;
+
   @media only screen and (max-width: 35rem) {
     justify-content: center;
-    height: 20rem;
+    height: 25rem;
   }
 }
