@@ -16,6 +16,7 @@ const celsius = document.querySelector(".celsius");
 
 // Needed in order to let user pick wheather he or she wants the temp format in either celcius or fahrenheit
 let isFahrenheit = true;
+// let isOn = false;
 
 // Event handlers
 form.addEventListener("submit", e => {
@@ -88,7 +89,11 @@ fahrenheit.addEventListener("click", () => {
     isFahrenheit = true;
     forecast.forEach(day => {
       let weatherTemp = day.querySelector(".weather-temp");
-      weatherTemp.textContent = celsiusToFahrenheit(weatherTemp.textContent);
+      console.log(weatherTemp.textContent);
+      // Edge case needed if user choses to pick celsius or fahrenheit button without displaying weather... Will return NaN otherwise
+      if (parseInt(weatherTemp.textContent)) {
+        weatherTemp.textContent = celsiusToFahrenheit(weatherTemp.textContent);
+      }
     });
   }
 });
@@ -98,7 +103,11 @@ celsius.addEventListener("click", () => {
     isFahrenheit = false;
     forecast.forEach(day => {
       let weatherTemp = day.querySelector(".weather-temp");
-      weatherTemp.textContent = fahrenheitToCelsius(weatherTemp.textContent);
+      console.log(weatherTemp.textContent);
+      // Edge case needed if user choses to pick celsius or fahrenheit button without displaying weather... Will return NaN otherwise
+      if (parseInt(weatherTemp.textContent)) {
+        weatherTemp.textContent = fahrenheitToCelsius(weatherTemp.textContent);
+      }
     });
   }
 });

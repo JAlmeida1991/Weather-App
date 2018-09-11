@@ -88,6 +88,12 @@ body {
 }
 
 @media only screen and (max-width: 35rem) {
+  .container--center {
+    margin: 2rem;
+  }
+}
+
+@media only screen and (max-width: 35rem) {
   .container {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
