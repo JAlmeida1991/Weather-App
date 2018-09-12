@@ -13,21 +13,23 @@ const input = document.querySelector("#input");
 const forecast = document.querySelectorAll(".forecast");
 const fahrenheit = document.querySelector(".fahrenheit");
 const celsius = document.querySelector(".celsius");
+const error = document.querySelector(".error");
 
 // Needed in order to let user pick wheather he or she wants the temp format in either celcius or fahrenheit
 let isFahrenheit = true;
-// let isOn = false;
 
 // Event handlers
 form.addEventListener("submit", e => {
   const value = input.value;
-  let count = 0;
+
   fetchWeather(value)
     .then(data => {
+      // Index and count is needed in order to transition to next day
+      let count = 0;
       const cityName = data.city.name;
       console.log(data);
       forecast.forEach((day, index) => {
-        // Index is needed in order to transition to next day
+        // Index and count is needed in order to transition to next day
         if (index !== 0) {
           count += 8;
         }
@@ -52,33 +54,21 @@ form.addEventListener("submit", e => {
         // Current tempature
         const weatherTemp = weatherForecast.temp;
         // Setting DOM node values
-        day.querySelector(".weather-icon").setAttribute("src", weatherIconURL);
+        setDOMValues(
+          day,
+          weatherIconURL,
+          weatherDescription,
+          weatherHumid,
+          formatedWeatherTimed,
+          weatherTemp
+        );
 
-        day.querySelector(
-          ".weather-description"
-        ).textContent = weatherDescription;
-
-        day.querySelector(
-          ".weather-humidity"
-        ).textContent = `Humidity: ${weatherHumid}%`;
-
-        day.querySelector(".weather-time").textContent = formatedWeatherTimed;
-
-        if (isFahrenheit) {
-          day.querySelector(".weather-temp").textContent = kelvinToFahrenheit(
-            weatherTemp
-          );
-        } else {
-          day.querySelector(".weather-temp").textContent = kelvinToCelsius(
-            weatherTemp
-          );
-        }
         input.value = "";
       });
       document.querySelector(".weather-city").textContent = cityName;
     })
     .catch(err => {
-      alert("Please enter a valid Zip Code");
+      displayErrorMessage();
       input.value = "";
     });
   e.preventDefault();
@@ -142,4 +132,32 @@ function celsiusToFahrenheit(celsius) {
 
 function fahrenheitToCelsius(fahrenheit) {
   return (((parseInt(fahrenheit) - 32) * 5) / 9).toFixed(0) + "°C";
+}
+
+function displayErrorMessage() {
+  error.style.display = "block";
+  setTimeout(() => {
+    error.style.display = "none";
+  }, 2000);
+}
+
+function setDOMValues(forecastDay, url, desc, humid, time, temp) {
+  debugger;
+  forecastDay.querySelector(".weather-icon").setAttribute("src", url);
+
+  forecastDay.querySelector(".weather-description").textContent = desc;
+
+  forecastDay.querySelector(
+    ".weather-humidity"
+  ).textContent = `Humidity: ${humid}%`;
+
+  forecastDay.querySelector(".weather-time").textContent = time;
+
+  if (isFahrenheit) {
+    forecastDay.querySelector(".weather-temp").textContent =
+      "Temperature: " + kelvinToFahrenheit(temp);
+  } else {
+    forecastDay.querySelector(".weather-temp").textContent =
+      "Temperature: " + kelvinToCelsius(temp);
+  }
 }
