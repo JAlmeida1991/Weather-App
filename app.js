@@ -14,6 +14,7 @@ const forecast = document.querySelectorAll(".forecast");
 const fahrenheit = document.querySelector(".fahrenheit");
 const celsius = document.querySelector(".celsius");
 const error = document.querySelector(".error");
+const container = document.querySelector(".container");
 
 // Needed in order to let user pick wheather he or she wants the temp format in either celcius or fahrenheit
 let isFahrenheit = true;
@@ -53,6 +54,8 @@ form.addEventListener("submit", e => {
         const weatherHumid = weatherForecast.humidity;
         // Current tempature
         const weatherTemp = weatherForecast.temp;
+
+        container.classList.remove("hidden-js");
         // Setting DOM node values
         setDOMValues(
           day,
@@ -154,10 +157,12 @@ function setDOMValues(forecastDay, url, desc, humid, time, temp) {
   forecastDay.querySelector(".weather-time").textContent = time;
 
   if (isFahrenheit) {
-    forecastDay.querySelector(".weather-temp").textContent =
-      "Temperature: " + kelvinToFahrenheit(temp);
+    forecastDay.querySelector(".weather-temp").textContent = kelvinToFahrenheit(
+      temp
+    );
   } else {
-    forecastDay.querySelector(".weather-temp").textContent =
-      "Temperature: " + kelvinToCelsius(temp);
+    forecastDay.querySelector(".weather-temp").textContent = kelvinToCelsius(
+      temp
+    );
   }
 }

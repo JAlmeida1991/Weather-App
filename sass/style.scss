@@ -2,6 +2,7 @@ $colorCelsius: #30a9de;
 $colorCelsiusHover: #0097e6;
 $colorFahrenheit: #e53a40;
 $colorFahrenheitHover: #c23616;
+$colorError: orangered;
 
 *::before,
 *::after,
@@ -71,25 +72,6 @@ body {
   }
 }
 
-.container {
-  display: flex;
-  justify-content: space-around;
-  @media only screen and (max-width: 35rem) {
-    flex-direction: column;
-    align-items: center;
-    order: 1;
-  }
-
-  &--center {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    @media only screen and (max-width: 35rem) {
-      margin: 2rem;
-    }
-  }
-}
-
 .celsius {
   @extend %button;
   background-color: $colorCelsius;
@@ -107,20 +89,6 @@ body {
   }
 }
 
-.forecast {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 30rem;
-  flex: 1;
-
-  @media only screen and (max-width: 35rem) {
-    justify-content: center;
-    height: 25rem;
-  }
-}
-
 .error {
   text-align: center;
   font-size: 1.4rem;
@@ -129,7 +97,40 @@ body {
   margin-top: 1rem;
   width: 80%;
   padding: 2rem;
-  background-color: orangered;
+  background-color: $colorError;
   border-radius: 1rem;
+  display: none;
+}
+
+.forecast {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 30rem;
+  flex: 1;
+
+  @media screen and (max-width: 30rem) {
+    justify-content: center;
+    height: 25rem;
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  @media screen and (max-width: 30rem) {
+    flex-direction: column;
+    align-items: center;
+    order: 1;
+  }
+  &--center {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+}
+
+.hidden-js {
   display: none;
 }
