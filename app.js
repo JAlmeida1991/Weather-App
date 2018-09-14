@@ -15,6 +15,7 @@ const fahrenheit = document.querySelector(".fahrenheit");
 const celsius = document.querySelector(".celsius");
 const error = document.querySelector(".error");
 const container = document.querySelector(".container");
+const spinner = document.querySelector(".spinner");
 
 // Needed in order to let user pick wheather he or she wants the temp format in either celcius or fahrenheit
 let isFahrenheit = true;
@@ -22,58 +23,61 @@ let isFahrenheit = true;
 // Event handlers
 form.addEventListener("submit", e => {
   const value = input.value;
+  displaySpinner();
 
-  fetchWeather(value)
-    .then(data => {
-      // Index and count is needed in order to transition to next day
-      let count = 0;
-      const cityName = data.city.name;
-      console.log(data);
-      forecast.forEach((day, index) => {
+  setTimeout(() => {
+    fetchWeather(value)
+      .then(data => {
         // Index and count is needed in order to transition to next day
-        if (index !== 0) {
-          count += 8;
-        }
-        // Obtains current weather object for specific day
-        const currentWeather = data.list[count].weather[0];
-        // Obtains current weather icon code
-        const weatherIconCode = currentWeather.icon;
-        // Obtains current weather icon code
-        // Must exclude defualt http since will not work for https servers
-        const weatherIconURL = `//openweathermap.org/img/w/${weatherIconCode}.png`;
-        // Obtains description for current weather
-        const weatherDescription = currentWeather.description;
-        // Need to convert Kelvin to either Fahrenheit or Celsius
-        const weatherForecast = data.list[count].main;
+        let count = 0;
+        const cityName = data.city.name;
+        console.log(data);
+        forecast.forEach((day, index) => {
+          // Index and count is needed in order to transition to next day
+          if (index !== 0) {
+            count += 8;
+          }
+          // Obtains current weather object for specific day
+          const currentWeather = data.list[count].weather[0];
+          // Obtains current weather icon code
+          const weatherIconCode = currentWeather.icon;
+          // Obtains current weather icon code
+          // Must exclude defualt http since will not work for https servers
+          const weatherIconURL = `//openweathermap.org/img/w/${weatherIconCode}.png`;
+          // Obtains description for current weather
+          const weatherDescription = currentWeather.description;
+          // Need to convert Kelvin to either Fahrenheit or Celsius
+          const weatherForecast = data.list[count].main;
 
-        const weatherTime = data.list[count].dt_txt;
+          const weatherTime = data.list[count].dt_txt;
 
-        const formatedWeatherTimed = new moment(weatherTime).format(
-          "MMM, Do YYYY"
-        );
-        const weatherHumid = weatherForecast.humidity;
-        // Current tempature
-        const weatherTemp = weatherForecast.temp;
+          const formatedWeatherTimed = new moment(weatherTime).format(
+            "MMM, Do YYYY"
+          );
+          const weatherHumid = weatherForecast.humidity;
+          // Current tempature
+          const weatherTemp = weatherForecast.temp;
 
-        container.classList.remove("hidden-js");
-        // Setting DOM node values
-        setDOMValues(
-          day,
-          weatherIconURL,
-          weatherDescription,
-          weatherHumid,
-          formatedWeatherTimed,
-          weatherTemp
-        );
+          container.classList.remove("hidden-js");
+          // Setting DOM node values
+          setDOMValues(
+            day,
+            weatherIconURL,
+            weatherDescription,
+            weatherHumid,
+            formatedWeatherTimed,
+            weatherTemp
+          );
 
+          input.value = "";
+        });
+        document.querySelector(".weather-city").textContent = cityName;
+      })
+      .catch(err => {
+        displayErrorMessage();
         input.value = "";
       });
-      document.querySelector(".weather-city").textContent = cityName;
-    })
-    .catch(err => {
-      displayErrorMessage();
-      input.value = "";
-    });
+  }, 2000);
   e.preventDefault();
 });
 
@@ -121,29 +125,6 @@ async function fetchWeather(zip) {
   }
 }
 
-function kelvinToFahrenheit(kelvin) {
-  return ((kelvin * 9) / 5 - 459.67).toFixed(0) + "°F";
-}
-
-function kelvinToCelsius(kelvin) {
-  return (kelvin - 273.15).toFixed(0) + "°C";
-}
-
-function celsiusToFahrenheit(celsius) {
-  return ((parseInt(celsius) * 9) / 5 + 32).toFixed(0) + "°F";
-}
-
-function fahrenheitToCelsius(fahrenheit) {
-  return (((parseInt(fahrenheit) - 32) * 5) / 9).toFixed(0) + "°C";
-}
-
-function displayErrorMessage() {
-  error.style.display = "block";
-  setTimeout(() => {
-    error.style.display = "none";
-  }, 2000);
-}
-
 function setDOMValues(forecastDay, url, desc, humid, time, temp) {
   debugger;
   forecastDay.querySelector(".weather-icon").setAttribute("src", url);
@@ -165,4 +146,35 @@ function setDOMValues(forecastDay, url, desc, humid, time, temp) {
       temp
     );
   }
+}
+
+function displayErrorMessage() {
+  error.style.display = "block";
+  setTimeout(() => {
+    error.style.display = "none";
+  }, 2000);
+}
+
+function displaySpinner() {
+  container.classList.add("hidden-js");
+  spinner.style.display = "block";
+  setTimeout(() => {
+    spinner.style.display = "none";
+  }, 2000);
+}
+
+function kelvinToFahrenheit(kelvin) {
+  return ((kelvin * 9) / 5 - 459.67).toFixed(0) + "°F";
+}
+
+function kelvinToCelsius(kelvin) {
+  return (kelvin - 273.15).toFixed(0) + "°C";
+}
+
+function celsiusToFahrenheit(celsius) {
+  return ((parseInt(celsius) * 9) / 5 + 32).toFixed(0) + "°F";
+}
+
+function fahrenheitToCelsius(fahrenheit) {
+  return (((parseInt(fahrenheit) - 32) * 5) / 9).toFixed(0) + "°C";
 }

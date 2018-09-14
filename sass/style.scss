@@ -119,18 +119,40 @@ body {
 .container {
   display: flex;
   justify-content: space-around;
-  @media screen and (max-width: 30rem) {
-    flex-direction: column;
-    align-items: center;
-    order: 1;
-  }
   &--center {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
   }
-}
 
+  @media screen and (max-width: 40rem) {
+    flex-direction: column;
+    align-items: center;
+    order: 1;
+  }
+}
+// Needs to be declared after container class since overiding display initally
 .hidden-js {
   display: none;
+}
+
+.spinner {
+  height: 30rem;
+  width: 30rem;
+  border-radius: 50%;
+  border-top: $colorFahrenheit solid 2px;
+  border-bottom: $colorCelsius solid 2px;
+  margin: 0 auto;
+  animation: spin 2s linear infinite;
+  margin-top: 2rem;
+  display: none;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -135,7 +135,17 @@ body {
       justify-content: space-around;
 }
 
-@media screen and (max-width: 30rem) {
+.container--center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 2rem;
+}
+
+@media screen and (max-width: 40rem) {
   .container {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -150,17 +160,42 @@ body {
   }
 }
 
-.container--center {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin-top: 2rem;
-}
-
 .hidden-js {
   display: none;
+}
+
+.spinner {
+  height: 30rem;
+  width: 30rem;
+  border-radius: 50%;
+  border-top: #e53a40 solid 2px;
+  border-bottom: #30a9de solid 2px;
+  margin: 0 auto;
+  -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
+  margin-top: 2rem;
+  display: none;
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 /*# sourceMappingURL=style.css.map */
