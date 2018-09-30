@@ -1,16 +1,4 @@
-$colorCelsius: #30a9de;
-$colorCelsiusHover: #0097e6;
-$colorFahrenheit: #e53a40;
-$colorFahrenheitHover: #c23616;
-$colorError: orangered;
-
-*::before,
-*::after,
-* {
-  border: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import "base";
 
 %button {
   padding: 1rem;
@@ -19,22 +7,13 @@ $colorError: orangered;
   font-weight: bolder;
   text-transform: uppercase;
   outline: none;
+  box-shadow: 0 0.3rem 0.2rem #333;
+  transition: all 0.25s;
 }
 
 @mixin title($val) {
   text-align: center;
   font-size: $val;
-}
-
-html {
-  font-size: 62.5%;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #dfe6e9;
-  display: flex;
-  flex-direction: column;
 }
 
 .weather {
@@ -53,12 +32,12 @@ body {
   }
 }
 
-#form {
+.form {
   display: flex;
   justify-content: center;
 }
 
-#input {
+.input {
   width: 20rem;
   padding: 1rem;
   margin-right: 1rem;
@@ -66,6 +45,13 @@ body {
 
 .btn {
   @extend %button;
+  &:active {
+    transform: translateY(0.1rem);
+    box-shadow: none;
+  }
+}
+
+.submit {
   background-color: #b2bec3;
   &:hover {
     background-color: #636e72;
@@ -73,7 +59,6 @@ body {
 }
 
 .celsius {
-  @extend %button;
   background-color: $colorCelsius;
   margin-right: 1.5rem;
   &:hover {
@@ -82,7 +67,6 @@ body {
 }
 
 .fahrenheit {
-  @extend %button;
   background-color: $colorFahrenheit;
   &:hover {
     background-color: $colorFahrenheitHover;
@@ -131,10 +115,6 @@ body {
     order: 1;
   }
 }
-// Needs to be declared after container class since overiding display initally
-.hidden-js {
-  display: none;
-}
 
 .spinner {
   height: 30rem;
@@ -146,6 +126,16 @@ body {
   animation: spin 2s linear infinite;
   margin-top: 2rem;
   display: none;
+}
+
+// Needs to be declared after container class since overiding display initally
+.hidden-js {
+  display: none;
+}
+
+.submit-js {
+  transform: translateY(0.1rem);
+  box-shadow: none;
 }
 
 @keyframes spin {

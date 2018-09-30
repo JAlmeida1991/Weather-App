@@ -1,0 +1,23 @@
+$colorCelsius: #30a9de;
+$colorCelsiusHover: #0097e6;
+$colorFahrenheit: #e53a40;
+$colorFahrenheitHover: #c23616;
+$colorError: orangered;
+
+*::before,
+*::after,
+* {
+  border: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #dfe6e9;
+  display: flex;
+  flex-direction: column;
+}
