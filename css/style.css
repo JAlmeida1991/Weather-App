@@ -129,7 +129,7 @@ body {
           flex: 1;
 }
 
-@media screen and (max-width: 30rem) {
+@media only screen and (max-width: 30em) {
   .forecast {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
@@ -156,7 +156,7 @@ body {
   margin-top: 2rem;
 }
 
-@media screen and (max-width: 40rem) {
+@media only screen and (max-width: 40em) {
   .container {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
