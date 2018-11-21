@@ -13,7 +13,9 @@ html {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #dfe6e9;
+  -webkit-transition: background-color 0.8s;
+  transition: background-color 0.8s;
+  background-color: #ffb599;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

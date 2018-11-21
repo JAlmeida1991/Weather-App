@@ -32,63 +32,65 @@
 
     displaySpinner();
     //  After spinner has finished loading show user forecast or error
-    setTimeout(() => {
-      fetchWeather(value)
-        .then(data => {
+
+    fetchWeather(value)
+      .then(data => {
+        // Remove Spinner
+        removeSpinner();
+        // Index and count is needed in order to transition to next day
+        let count = 0;
+        const cityName = data.city.name;
+        forecast.forEach((day, index) => {
           // Index and count is needed in order to transition to next day
-          let count = 0;
-          const cityName = data.city.name;
-          forecast.forEach((day, index) => {
-            // Index and count is needed in order to transition to next day
-            if (index !== 0) count += 8;
+          if (index !== 0) count += 8;
 
-            // Obtains current weather object for specific day
-            const currentWeather = data.list[count].weather[0];
-            // Obtains current weather icon code
-            const weatherIconCode = currentWeather.icon;
-            // Obtains current weather icon code
-            // Must exclude defualt http since will not work for https servers
-            const weatherIconURL = `//openweathermap.org/img/w/${weatherIconCode}.png`;
-            // Obtains description for current weather
-            const weatherDescription = currentWeather.description;
-            // Need to convert Kelvin to either Fahrenheit or Celsius
-            const weatherForecast = data.list[count].main;
+          // Obtains current weather object for specific day
+          const currentWeather = data.list[count].weather[0];
+          // Obtains current weather icon code
+          const weatherIconCode = currentWeather.icon;
+          // Obtains current weather icon code
+          // Must exclude defualt http since will not work for https servers
+          const weatherIconURL = `//openweathermap.org/img/w/${weatherIconCode}.png`;
+          // Obtains description for current weather
+          const weatherDescription = currentWeather.description;
+          // Need to convert Kelvin to either Fahrenheit or Celsius
+          const weatherForecast = data.list[count].main;
 
-            const weatherTime = data.list[count].dt_txt;
+          const weatherTime = data.list[count].dt_txt;
 
-            // Format time using moment library
-            const formatedWeatherTimed = new moment(weatherTime).format(
-              "MMM, Do YYYY"
-            );
-            const weatherHumid = weatherForecast.humidity;
-            // Current tempature
-            const weatherTemp = weatherForecast.temp;
+          // Format time using moment library
+          const formatedWeatherTimed = new moment(weatherTime).format(
+            "MMM, Do YYYY"
+          );
+          const weatherHumid = weatherForecast.humidity;
+          // Current tempature
+          const weatherTemp = weatherForecast.temp;
 
-            container.classList.remove("hidden-js");
-            // Setting DOM node values
-            setDOMValues(
-              day,
-              weatherIconURL,
-              weatherDescription,
-              weatherHumid,
-              formatedWeatherTimed,
-              weatherTemp
-            );
+          container.classList.remove("hidden-js");
+          // Setting DOM node values
+          setDOMValues(
+            day,
+            weatherIconURL,
+            weatherDescription,
+            weatherHumid,
+            formatedWeatherTimed,
+            weatherTemp
+          );
 
-            input.value = "";
-          });
-          document.querySelector(".weather-city").textContent = cityName;
-        })
-        .catch(err => {
-          displayErrorMessage();
           input.value = "";
         });
-    }, 2000);
+        document.querySelector(".weather-city").textContent = cityName;
+      })
+      .catch(err => {
+        displayErrorMessage();
+        input.value = "";
+      });
     e.preventDefault();
   });
 
   fahrenheit.addEventListener("click", () => {
     if (!isFahrenheit) {
+      document.querySelector("body").style.backgroundColor = "#ffb599";
       isFahrenheit = true;
       forecast.forEach(day => {
         const weatherTemp = day.querySelector(".weather-temp");
@@ -105,6 +107,7 @@
 
   celsius.addEventListener("click", () => {
     if (isFahrenheit) {
+      document.querySelector("body").style.backgroundColor = "#b7dbff";
       isFahrenheit = false;
       forecast.forEach(day => {
         const weatherTemp = day.querySelector(".weather-temp");
@@ -167,16 +170,17 @@
   function displaySpinner() {
     container.classList.add("hidden-js");
     spinner.style.display = "block";
-    setTimeout(() => {
-      spinner.style.display = "none";
-    }, 2000);
+  }
+
+  function removeSpinner() {
+    spinner.style.display = "none";
   }
 
   function displaySubmitInput() {
     submit.classList.add("submit-js");
     setTimeout(() => {
       submit.classList.remove("submit-js");
-    }, 250);
+    }, 100);
   }
 
   function kelvinToFahrenheit(kelvin) {
