@@ -60,7 +60,7 @@
 
           // Format time using moment library
           const formatedWeatherTimed = new moment(weatherTime).format(
-            "MMM, Do YYYY"
+            "MMM Do, YYYY"
           );
           const weatherHumid = weatherForecast.humidity;
           // Current tempature
@@ -82,8 +82,10 @@
         document.querySelector(".weather-city").textContent = cityName;
       })
       .catch(err => {
+        removeSpinner();
         displayErrorMessage();
         input.value = "";
+        document.querySelector(".weather-city").textContent = "...";
       });
     e.preventDefault();
   });
