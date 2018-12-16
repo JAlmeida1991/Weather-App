@@ -1,0 +1,30 @@
+.forecast {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 30rem;
+  border: 1px solid black;
+  width: 100%;
+  max-width: 25rem;
+  margin: 0.8rem;
+  margin-top: 2rem;
+  box-shadow: 0 1px 1px black;
+}
+
+.weather {
+  &-app-title {
+    @include title(2.5rem);
+  }
+
+  &-description {
+    font-size: 1.5rem;
+
+    text-transform: capitalize;
+  }
+
+  &-temp,
+  &-humidity {
+    font-size: 1.5rem;
+  }
+}

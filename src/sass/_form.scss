@@ -1,0 +1,17 @@
+.form {
+  display: flex;
+  justify-content: center;
+}
+
+.input {
+  width: 20rem;
+  padding: 1rem;
+  margin-right: 1rem;
+}
+
+.submit {
+  background-color: #b2bec3;
+  &:hover {
+    background-color: #636e72;
+  }
+}

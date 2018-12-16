@@ -1,0 +1,9 @@
+// Needs to be declared after container class since overiding display initally
+.hidden-js {
+  display: none;
+}
+
+.submit-js {
+  transform: translateY(0.1rem);
+  box-shadow: none;
+}

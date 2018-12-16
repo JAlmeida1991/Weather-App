@@ -1,0 +1,33 @@
+%button {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bolder;
+  text-transform: uppercase;
+  outline: none;
+  box-shadow: 0 0.3rem 0.2rem #333;
+  transition: all 0.25s;
+}
+
+.btn {
+  @extend %button;
+  &:active {
+    transform: translateY(0.1rem);
+    box-shadow: none;
+  }
+}
+
+.celsius {
+  background-color: $colorCelsius;
+  margin-right: 1.5rem;
+  &:hover {
+    background-color: $colorCelsiusHover;
+  }
+}
+
+.fahrenheit {
+  background-color: $colorFahrenheit;
+  &:hover {
+    background-color: $colorFahrenheitHover;
+  }
+}

@@ -1,0 +1,4 @@
+@mixin title($val) {
+  text-align: center;
+  font-size: $val;
+}
